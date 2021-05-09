@@ -7,11 +7,14 @@ const CameraAndroid = () => {
     const [hasPermission, setPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [camera, setCamera] = useState(null);
+    const [hasPermissionML, setPermissionML] = useState(null);
+
 
     useEffect(() => {
         (async () => {
             const {status} = await Camera.requestPermissionsAsync();
             setPermission(status === 'granted');
+
         })();
     }, [])
 
@@ -21,6 +24,23 @@ const CameraAndroid = () => {
     if (hasPermission === false) {
         return <Text>no access to camera</Text>;
     }
+
+    // can't provide permission req of ML
+    //
+    // useEffect(() => {
+    //     (async () => {
+    //         const {status} = await MediaLibrary.requestPermissionsAsync();
+    //         console.log('STATUS OF ML permission', status)
+    //         setPermissionML(status === 'granted');
+    //     })();
+    // }, [])
+    //
+    // if (hasPermissionML === null) {
+    //     return <View/>;
+    // }
+    // if (hasPermissionML === false) {
+    //     return <Text>no access to Media_Library</Text>;
+    // }
 
     async function takePicture() {
         if (hasPermission) {
@@ -43,7 +63,6 @@ const CameraAndroid = () => {
                 <View style={styles.cameraContainer}>
                     {/*не называть файлы и функции как библиотеки - автокомплит подтягивает не то, что нужно*/}
                     <Camera style={styles.fixedRatio} type={type} ref={(r) => setCamera(r)}/>
-                    {/*работает на Pressable, или TouchableHighlight, но не работает на Button --- ???*/}
                     <TouchableHighlight
                         style={styles.button}
                         onPress={() => {}}
